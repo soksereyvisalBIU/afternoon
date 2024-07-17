@@ -15,6 +15,8 @@ class CreateUser extends Component
     public $password;
     public $profile;
 
+    public $search;
+
     public $id = null;
     
     public function createUpdate(){
@@ -61,16 +63,27 @@ class CreateUser extends Component
 
 
     public function edit($id){
+
         $user = User::find($id);
+
         $this->name = $user->name;
         $this->email = $user->email;
+
         $this->id = $user->id;
     }
     
     
     public function render()
     {
-        $users = User::get();
-        return view('livewire.create-user' , compact('users'));
+        $usersCount = User::count();
+
+        if($this->search){
+            $users = User::where('name' , "like" , '%'.$this->search.'%')->orWhere('id' ,"like" , '%'.$this->search.'%')->paginate(10);
+        }else{
+            $users = User::paginate(10);
+        }
+        
+        
+        return view('livewire.create-user' , compact('users' , 'usersCount'));
     }
 }

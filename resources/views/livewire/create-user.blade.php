@@ -1,20 +1,28 @@
-<div class="row mt-5">
+<div class="row mt-5" wire:poll.100s>
 
 
-    <div class="col-6">
+    <div class="col-6" >
         <div class="card">
             <div class="card-header">
                 User Table
             </div>
 
+            <p class="alert alert-warning" wire:offline>
+                Whoops, your device has lost connection. The web page you are viewing is offline.
+            </p>
+            
             <div class="card-body">
+                <h3>User : {{ $usersCount }}</h3>
 
-                <h3>User : {{ $users->count() }}</h3>
+                <div>
+                    <input wire:model.live="search" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                </div>
 
-                @if(session('delete'))
-                <div class="alert alert-danger" role="alert">
-                    {{ session('delete') }}
-                  </div>
+
+                @if (session('delete'))
+                    <div class="alert alert-danger" role="alert">
+                        {{ session('delete') }}
+                    </div>
                 @endif
 
                 <table class="table table-bordered" style="vertical-align: middle">
@@ -38,18 +46,24 @@
                                 {{ $user->email }}
                             </td>
                             <td>
-                                <img style="max-width: 100px" class="w-100" src="{{ asset('storage/'.$user->profile) }}" alt="">
+                                <img style="max-width: 100px" class="w-100"
+                                    src="{{ asset('storage/' . $user->profile) }}" alt="">
                             </td>
                             <td>
-                                <button class="btn btn-warning fa fa-edit" wire:click="edit({{ $user->id }})"></button>
-                                <button class="btn btn-outline-danger fa fa-trash" wire:click="delete({{ $user->id }})"></button>
+                                <button class="btn btn-warning fa fa-edit"
+                                    wire:click="edit({{ $user->id }})"></button>
+                                <button class="btn btn-outline-danger fa fa-trash"  wire:confirm.prompt="Are you sure?\n\nType DELETE to confirm|DELETE"
+                                    wire:click="delete({{ $user->id }})"></button>
                             </td>
                         </tr>
                     @endforeach
 
                 </table>
+
+                {{ $users->links() }}
+
             </div>
-        </div>
+        </div>  
     </div>
 
     <div class="col-6">
@@ -61,13 +75,13 @@
 
             <div class="card-body">
 
-                @if(session('success'))
-                <div class="alert alert-success" role="alert">
-                    {{ session('success') }}
-                  </div>
+                @if (session('success'))
+                    <div class="alert alert-success" role="alert">
+                        {{ session('success') }}
+                    </div>
                 @endif
-                
-                <form action="" wire:submit="createUpdate" >
+
+                <form action="" wire:submit="createUpdate">
                     <div class="form-floating mb-3">
                         <input wire:model="name" type="name" class="form-control" id="floatingName"
                             placeholder="name">
@@ -106,11 +120,16 @@
                         @enderror
                     </div>
 
-                    <div>
+                    <div wire:loading.remove>
                         <button class="btn btn-success">submit</button>
                     </div>
 
                 </form>
+
+                <div wire:loading> 
+                    Saving post...
+                </div>
+                
             </div>
 
         </div>
