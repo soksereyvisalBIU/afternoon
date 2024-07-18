@@ -1,4 +1,4 @@
-<div class="row mt-5" wire:poll.100s>
+<div class="row mt-5" wire:poll.10s>
 
 
     <div class="col-6" >
@@ -118,17 +118,27 @@
                         @error('profile')
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
+
+                        @if($profile)
+                            <div>
+                                <img width="100px" src="{{ $profile->temporaryUrl() }}" alt="">
+                            </div>
+                        @endif
+                        
                     </div>
 
+
+                    <div wire:loading> 
+                        Saving post...
+                    </div>
+                    
                     <div wire:loading.remove>
                         <button class="btn btn-success">submit</button>
                     </div>
 
                 </form>
 
-                <div wire:loading> 
-                    Saving post...
-                </div>
+
                 
             </div>
 
