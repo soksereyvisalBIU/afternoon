@@ -5,9 +5,12 @@ namespace App\Livewire;
 use App\Models\User;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Livewire\WithPagination;
+
 class CreateUser extends Component
 {
 
+    use WithPagination;
     use WithFileUploads;
 
     public $name;

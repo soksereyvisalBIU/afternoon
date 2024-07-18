@@ -60,7 +60,7 @@
 
                 </table>
 
-                {{ $users->links() }}
+                {{ $users->links('vendor.livewire.bootstrap') }}
 
             </div>
         </div>  
